@@ -77,7 +77,7 @@ if (not os.path.isdir(outDir)): # create output dir if it doesn't exist
 # Global Parameters
 z_lower, z_upper = 6e-3, 50-3 # bottom and top of cylinder
 rmin, rmax = 10e-3, 48e-3 # min and max radii
-N = 2  # number of slices
+N = 10 # number of slices
 tid = np.array([0,1]) # time id
 
 for jj in tid:
