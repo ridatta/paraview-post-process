@@ -4,7 +4,7 @@
 # ~ For vector data, an addition step calculates the magnitude of the vector first.
 # Usage:
 # pvpython getCylindricalSlice-batch.py dataSet dname isVector 
-# e.g. pvpython getCylindricalSlice-batch.py 
+# e.g. pvpython /path/to/file/getCylindricalSlice-batch.py 
 from paraview.simple import *
 import numpy as np
 import os
