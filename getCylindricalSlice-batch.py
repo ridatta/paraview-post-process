@@ -51,7 +51,7 @@ def processAllSlices(data,arrName):
 	# then calculates the verage value at each slice
 	r = np.linspace(rmin,rmax,N) # radii to process
 	val = np.zeros(r.size) # array conating averaged data
-	for ii in range(N):
+	for ii in range(N): # Note: File name should be of the form x01_rnec-240.vti
 		print('Processing slice ' + str(ii+1) + '/' + str(N) + '...')
 		val[ii] = processAtSlice(data,arrName,r[ii])
 	return r,val
@@ -100,10 +100,10 @@ if (not os.path.isdir(outDir)): # create output dir if it doesn't exist
 	os.mkdir(outDir)
 
 # Global Parameters
-z_lower, z_upper = 6e-3, 50-3 # bottom and top of cylinder
+z_lower, z_upper = 6e-3, 28-3 # bottom and top of cylinder
 rmin, rmax = 10e-3, 48e-3 # min and max radii
 N = 10  # number of slices
-tid = np.array([0,1]) # time id
+tid = np.array([80,160,240,320,400,480]) # time id
 fn('rnec','Electron Density',0,'.vti') # fn(dataSetName, dataType, isVector = 0 or 1, filetype = 'vti' or '.vtk')
 fn('rho','Mass Density',0,'.vti')
 fn('array_pres','Pressure',0,'.vti')
@@ -112,3 +112,4 @@ fn('Bvec','Magnetic Field',1,'.vti')
 fn('jvec','Current Density',1,'.vti')
 fn('Ti','Ti',0,'.vti')
 fn('Te','Te',0,'.vti')
+# Note: File name should be of the form x01_rnec-240.vti
