@@ -94,8 +94,8 @@ def fn(dataSet,dname,isVector,ftype):
 	print('Done')
 
 # Input and Output directory
-inDir = '/Users/Rishabh/Dropbox (MIT)/PUFFIN/Codes/Paraview/Macros/paraview-post-process/'  # Input dir
-outDir = '/Users/Rishabh/Dropbox (MIT)/PUFFIN/Data/Other/'  # Output dir
+inDir = '/path/to/file/Macros/paraview-post-process/'  # Input dir
+outDir = '/path/to/file/Other/'  # Output dir
 if (not os.path.isdir(outDir)): # create output dir if it doesn't exist
 	os.mkdir(outDir)
 
@@ -104,4 +104,11 @@ z_lower, z_upper = 6e-3, 50-3 # bottom and top of cylinder
 rmin, rmax = 10e-3, 48e-3 # min and max radii
 N = 10  # number of slices
 tid = np.array([0,1]) # time id
-fn('u','Test',0,'.vtk')
+fn('rnec','Electron Density',0,'.vti') # fn(dataSetName, dataType, isVector = 0 or 1, filetype = 'vti' or '.vtk')
+fn('rho','Mass Density',0,'.vti')
+fn('array_pres','Pressure',0,'.vti')
+fn('vvec','Velocity',1,'.vti')
+fn('Bvec','Magnetic Field',1,'.vti')
+fn('jvec','Current Density',1,'.vti')
+fn('Ti','Ti',0,'.vti')
+fn('Te','Te',0,'.vti')
