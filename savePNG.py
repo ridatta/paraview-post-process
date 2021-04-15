@@ -3,7 +3,7 @@ import os
 import sys
 import numpy as np
 
-# ~ This script loads 2D .vti  surface data output from GORGON into Paraview,
+# ~ This script loads 2D or 3D .vti  surface data output from GORGON into Paraview,
 # ~ visualizes the number density on a log scale and saves the visualization as .PNG
 # Usage:
 # e.g. pvpython /path/to/file/savePNG.py 
@@ -14,26 +14,43 @@ Connect()
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
 
-def saveCurrentDataAsPNG(inputDir,fn,outDir):
+def saveCurrentDataAsPNG(inputDir,fn,repType,outDir):
+	# inputDir = input directoru
+	# fn = file name
+	# repType = representation type, 'Volume' for 3D, 'Surface' for 2D
 
 	density = XMLImageDataReader(FileName=[inputDir + fn]) # Load the number density
 	density.CellArrayStatus = ['rnec']
 	# Show
 	renderView1 = GetActiveViewOrCreate('RenderView')
+	renderView1.ViewSize = [800,800]
 	densityDisplay = Show(density, renderView1)
 	ColorBy(densityDisplay, ('CELLS', 'rnec'))
-	densityDisplay.SetRepresentationType('Surface')
+	densityDisplay.SetRepresentationType(repType)
 	densityDisplay.SetScalarBarVisibility(renderView1, True)
 	rnecLUT = GetColorTransferFunction('rnec')
 	LoadPalette(paletteName='BlackBackground')
 	rnecLUT.MapControlPointsToLogSpace()
-	rnecLUT.UseLogScale = 1
+	rnecLUT.UseLogScale = 1 # Toggle for log scale or linear scale
 	rnecLUT.RescaleTransferFunction(n_min, n_max)
 	rnecLUT.ApplyPreset('Inferno (matplotlib)', True)
 	
-	# reset view to fit data
-	renderView1.ResetCamera()
-	camera=GetActiveCamera()
+	if (repType == 'Volume'):
+		# Camera 
+		renderView1.ResetCamera()
+		camera=GetActiveCamera()
+		camera.SetFocalPoint(0,0,0)
+		# End-On
+		camera.SetPosition(0,0,0.2)
+		camera.SetViewUp(0,1,0)
+		# ~ # Side-On # Uncomment for side-on
+		# ~ camera.Pitch(90)
+		# Ortho
+		camera.Pitch(45)  # Un-comment for orthogonal
+		
+		ResetCamera()
+		camera.Dolly(1.5)
+	Render()
 	
 	# Save
 	SaveScreenshot(outDir + fn[0:len(fn)-4]  + '.png', renderView1)
@@ -55,7 +72,7 @@ if (not os.path.isdir(outDir)): # create output dir if it doesn't exist
 
 for ti in tvals:
 	fn = 'x00_rnec-' + str(ti) + '.vti' # Filename, number density
-	saveCurrentDataAsPNG(inputDir,fn,outDir)
+	saveCurrentDataAsPNG(inputDir,fn,'Volume',outDir)
 
 
 
